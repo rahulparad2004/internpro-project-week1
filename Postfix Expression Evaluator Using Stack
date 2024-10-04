@@ -1,0 +1,44 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+int evaluatePostfix(string &expression) {
+    stack<int> s;
+
+    for (char ch : expression) {
+        // If it is a digit push into stack
+        if (isdigit(ch)) {
+            s.push(ch - '0'); // Convert
+        }
+        else if (ch == '+' || ch == '-' || ch == '*' || ch == '/') {
+            int operand2 = s.top(); s.pop(); // Pop the 2nd operand
+            int operand1 = s.top(); s.pop(); // Pop the 1st operand
+
+            switch (ch) {
+                case '+': s.push(operand1 + operand2); break;
+                case '-': s.push(operand1 - operand2); break;
+                case '*': s.push(operand1 * operand2); break;
+                case '/': 
+                    if (operand2 != 0)
+                        s.push(operand1 / operand2); 
+                    else {
+                        return -1;
+                    }
+                    break;
+                default: 
+                    return -1;
+            }
+        }
+    }
+    return s.top();
+}
+
+int main() {
+    string expression;
+    cout << "Enter postfix expression: ";
+    getline(cin, expression);
+    int result = evaluatePostfix(expression);
+    if (result != -1) {
+        cout << "The result is: " << result << endl;
+    }
+    return 0;
+}
